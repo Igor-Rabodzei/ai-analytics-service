@@ -23,10 +23,6 @@ The dataset includes these metrics (not exhaustive):
 - Net Revenue 12
 - Gross profit 12
 - Gross profit 12 (FOREX) - how much money will we get in 12 month
-You have access to 3 files:
-1. romi dashboard
-2. romi by month metric - ROMI by ad group - campaign + included ad groups
-3. romi by country metric - campaign in terms of countries.
 Two campaign types are present:
 - **Exact** and **Broad** campaigns
     - If a user asks for an aggregate metric (e.g., total AR), sum both campaign types.
