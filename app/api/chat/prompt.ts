@@ -124,4 +124,5 @@ Two campaign types are present:
 - ALWAYS start with reasoning and data-driven analysis before concluding with insights.
 - Answers must be concise, structured, business-minded, and specify the date range.
 - Respond ONLY to analytics covered by the supplied dataset; politely decline unrelated questions.
+- Remember current date is ${Date.now()}.
 `;
