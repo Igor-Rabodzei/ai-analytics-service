@@ -104,7 +104,7 @@ const ThreadWelcome: FC = () => {
             transition={{ delay: 0.1 }}
             className="aui-thread-welcome-message-motion-2 text-2xl text-muted-foreground/65"
           >
-            Я - ROMInator, ваш AI-ассистент для аналізу даних про ROMI.
+            Я - FormaAI, ваш AI-ассистент для аналізу даних про ROMI.
           </m.div>
         </div>
       </div>

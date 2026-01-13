@@ -95,3 +95,66 @@ This will:
 - `CLICKHOUSE_PASSWORD` - Password
 
 **Note:** HTTP API uses port **8123**, not 9000 (which is for native client).
+
+## AWS Athena Integration
+
+The project supports querying dbt models stored in AWS Athena for marketing analytics.
+
+### Marketing Analytics Tools
+
+Two specialized tools are available for marketing campaign analysis:
+
+1. **marketing_analyzer**: Analyzes marketing campaigns with funnel metrics
+   - Supports campaign-level and ad-group-level analysis
+   - Country and device breakdowns
+   - Transactional and keyword analysis
+   - Returns conversion rates and funnel metrics
+
+2. **funnel_drop_analyzer**: Identifies the biggest drop in conversion funnel
+   - Analyzes click→visitor, visitor→user, user→trial, trial→r1 steps
+   - Returns the step with the highest drop percentage
+
+### Configuration
+
+Add the following environment variables to `.env.local`:
+
+```bash
+# AWS Credentials
+AWS_REGION=us-east-1
+AWS_ACCESS_KEY_ID=your-access-key-id
+AWS_SECRET_ACCESS_KEY=your-secret-access-key
+
+# Athena Configuration
+ATHENA_DATABASE=dwh_pdfguru
+ATHENA_WORK_GROUP=primary
+# ATHENA_OUTPUT_LOCATION is required if WorkGroup doesn't have output location configured
+# Set this to an existing S3 bucket with write permissions
+ATHENA_OUTPUT_LOCATION=s3://your-bucket/athena-results/
+```
+
+**Important:** If you get "Unable to verify/create output bucket" error, you need to either:
+
+1. **Configure WorkGroup output location in AWS Console:**
+   - Go to Athena → Workgroups → Select your workgroup → Edit
+   - Set "Query result location" to an S3 bucket (e.g., `s3://your-bucket/athena-results/`)
+   - Ensure the bucket exists and has proper permissions
+
+2. **Or set ATHENA_OUTPUT_LOCATION in .env.local:**
+   - Use an existing S3 bucket in the same region
+   - Ensure your AWS credentials have `s3:PutObject`, `s3:GetObject`, `s3:ListBucket` permissions
+
+### Available dbt Models
+
+The marketing analyzer supports the following dbt models:
+- `tableau_marketing_campaigns` - Campaign-level funnel metrics
+- `tableau_marketing_ad_groups` - Ad group-level breakdown
+- `tableau_marketing_countries` - Country breakdown
+- `tableau_marketing_devices` - Device breakdown
+- `tableau_marketing_transactional` - Transactional data
+- `tableau_marketing_keywords` - Keyword analysis
+
+### Example Queries
+
+- "Проаналізуй кампанію BSN_AU-NZ_All_Exact_Purchase/07 з 2026-01-01 по 2026-01-07"
+- "Знайди найбільшу просадку у воронці для кампанії X"
+- "Покажи деталізацію по ad groups для кампанії Y"

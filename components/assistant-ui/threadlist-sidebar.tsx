@@ -45,14 +45,14 @@ export function ThreadListSidebar({
                   <div className="aui-sidebar-header-icon-wrapper flex aspect-square size-12 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                     <Image
                       src="/logo.png"
-                      alt="ROMInator"
+                      alt="FormaAI"
                       width={32}
                       height={32}
                     />
                   </div>
                   <div className="aui-sidebar-header-heading mr-6 flex flex-col gap-0.5 leading-none">
                     <span className="aui-sidebar-header-title font-semibold">
-                      ROMInator
+                      FormaAI
                     </span>
                   </div>
                 </Link>

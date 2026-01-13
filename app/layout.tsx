@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ROMInator",
-  description: "ROMInator - AI Assistant",
+  title: "FormaAI",
+  description: "FormaAI - AI Assistant",
 };
 
 export default function RootLayout({

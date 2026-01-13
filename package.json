@@ -11,6 +11,7 @@
     "prettier:fix": "prettier --write .",
     "generate-catalog": "npx ts-node --project tsconfig.scripts.json scripts/generate-ai-catalog.ts",
     "test:clickhouse": "npx ts-node --project tsconfig.scripts.json scripts/test-clickhouse.ts",
+    "test:athena": "npx ts-node --project tsconfig.scripts.json scripts/test-athena.ts",
     "test:sql-validator": "npx ts-node --project tsconfig.scripts.json scripts/test-sql-validator.ts"
   },
   "prettier": {
@@ -24,6 +25,7 @@
     "@assistant-ui/react": "^0.11.28",
     "@assistant-ui/react-ai-sdk": "^1.1.5",
     "@assistant-ui/react-markdown": "^0.11.1",
+    "@aws-sdk/client-athena": "^3.967.0",
     "@clickhouse/client": "^1.14.0",
     "@radix-ui/react-avatar": "^1.1.10",
     "@radix-ui/react-dialog": "^1.1.15",
@@ -34,6 +36,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "decimal.js": "^10.6.0",
+    "dotenv": "^17.2.3",
     "framer-motion": "^12.23.22",
     "lucide-react": "^0.545.0",
     "motion": "^12.23.22",
