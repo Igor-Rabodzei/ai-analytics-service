@@ -21,6 +21,8 @@ export function createAthenaClient() {
       accessKeyId,
       secretAccessKey,
     },
+    // Increase retry attempts to handle transient network errors
+    maxAttempts: 3,
   });
 }
 
@@ -75,31 +77,44 @@ export async function runAthenaSelect<T extends Record<string, unknown>>(
   const maxWaitTime = maxExecutionTimeSeconds * 1000;
 
   while (true) {
-    const getCommand = new GetQueryExecutionCommand({
-      QueryExecutionId: queryExecutionId,
-    });
+    try {
+      const getCommand = new GetQueryExecutionCommand({
+        QueryExecutionId: queryExecutionId,
+      });
 
-    const statusResponse = await client.send(getCommand);
-    const state = statusResponse.QueryExecution?.Status?.State;
+      const statusResponse = await client.send(getCommand);
+      const state = statusResponse.QueryExecution?.Status?.State;
 
-    if (state === QueryExecutionState.SUCCEEDED) {
-      break;
+      if (state === QueryExecutionState.SUCCEEDED) {
+        break;
+      }
+
+      if (
+        state === QueryExecutionState.FAILED ||
+        state === QueryExecutionState.CANCELLED
+      ) {
+        const reason = statusResponse.QueryExecution?.Status?.StateChangeReason;
+        throw new Error(`Query failed: ${reason ?? state}`);
+      }
+
+      if (Date.now() - startTime > maxWaitTime) {
+        throw new Error('Query execution timeout');
+      }
+
+      // Wait before next poll
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    } catch (error) {
+      // Handle network timeouts and retry
+      if (error instanceof Error && (error.message.includes('ETIMEDOUT') || error.message.includes('timeout'))) {
+        // Retry once more before giving up
+        if (Date.now() - startTime < maxWaitTime) {
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+          continue;
+        }
+        throw new Error(`Query execution timeout: ${error.message}`);
+      }
+      throw error;
     }
-
-    if (
-      state === QueryExecutionState.FAILED ||
-      state === QueryExecutionState.CANCELLED
-    ) {
-      const reason = statusResponse.QueryExecution?.Status?.StateChangeReason;
-      throw new Error(`Query failed: ${reason ?? state}`);
-    }
-
-    if (Date.now() - startTime > maxWaitTime) {
-      throw new Error('Query execution timeout');
-    }
-
-    // Wait before next poll
-    await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 
   // Get query results
@@ -138,7 +153,12 @@ export async function runAthenaSelect<T extends Record<string, unknown>>(
         // Try to parse as number if possible
         if (value !== null && value !== '') {
           const numValue = Number(value);
-          rowData[colName] = isNaN(numValue) ? value : numValue;
+          // Check for NaN explicitly
+          if (Number.isNaN(numValue)) {
+            rowData[colName] = value;
+          } else {
+            rowData[colName] = numValue;
+          }
         } else {
           rowData[colName] = null;
         }
