@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "generated_at": "2025-12-16T07:59:55.495Z",
+  "source": {
+    "manifest": "manifest.json",
+    "catalog": "catalog.json"
+  },
+  "models": [
+    {
+      "name": "mart_marketing__ltv_weekly",
+      "description": "Середній LTV по тижнях (6 та 12 місяців)",
+      "domain": "marketing",
+      "grain": "weekly",
+      "dimensions": [
+        "last_date_of_week"
+      ],
+      "metrics": [
+        "avg_ltv_6",
+        "avg_ltv_12"
+      ],
+      "tags": [],
+      "database": "",
+      "schema": "ai_analytics",
+      "relation_name": "`ai_analytics`.`mart_marketing__ltv_weekly`",
+      "path": "models/marts/marketing/mart_marketing__ltv_weekly.sql",
+      "columns": {
+        "last_date_of_week": {
+          "description": "Остання дата тижня (week end).",
+          "data_type": "Date",
+          "meta": {
+            "type": "dimension"
+          }
+        },
+        "avg_ltv_6": {
+          "description": "Середній LTV за 6 періодів.",
+          "data_type": "Float64",
+          "meta": {
+            "type": "metric",
+            "unit": "eur"
+          }
+        },
+        "avg_ltv_12": {
+          "description": "Середній LTV за 12 періодів.",
+          "data_type": "Float64",
+          "meta": {
+            "type": "metric",
+            "unit": "eur"
+          }
+        }
+      }
+    },
+    {
+      "name": "mart_marketing__profit_country",
+      "description": "Витрати, дохід та прибуток по країнах",
+      "domain": "marketing",
+      "grain": "country",
+      "dimensions": [
+        "country"
+      ],
+      "metrics": [
+        "total_cost",
+        "total_revenue",
+        "profit"
+      ],
+      "tags": [],
+      "database": "",
+      "schema": "ai_analytics",
+      "relation_name": "`ai_analytics`.`mart_marketing__profit_country`",
+      "path": "models/marts/marketing/mart_marketing__profit_country.sql",
+      "columns": {
+        "country": {
+          "description": "Країна.",
+          "data_type": "String",
+          "meta": {
+            "type": "dimension"
+          }
+        },
+        "total_cost": {
+          "description": "Сумарні витрати у USD.",
+          "data_type": "Float64",
+          "meta": {
+            "type": "metric",
+            "unit": "eur"
+          }
+        },
+        "total_revenue": {
+          "description": "Сумарний дохід.",
+          "data_type": "Float64",
+          "meta": {
+            "type": "metric",
+            "unit": "eur"
+          }
+        },
+        "profit": {
+          "description": "Прибуток = revenue - cost.",
+          "data_type": "Float64",
+          "meta": {
+            "type": "metric",
+            "unit": "eur"
+          }
+        }
+      }
+    }
+  ]
+}
