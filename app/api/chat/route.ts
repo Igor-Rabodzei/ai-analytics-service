@@ -8,6 +8,7 @@ import { queryExecutorTool } from "./query-executor";
 import { marketingAnalyzerTool } from "./marketing-analyzer";
 import { funnelDropAnalyzerTool } from "./funnel-drop-analyzer";
 import { listCampaignsTool } from "./list_сampaigns";
+import { abTestLandingAnalyzerTool } from "./ab-test-landing-analyzer";
 
 export async function POST(req: Request) {
   const { messages }: { messages: UIMessage[] } = await req.json();
@@ -54,6 +55,11 @@ export async function POST(req: Request) {
         description: "List all campaigns in the database from AWS Athena. Use this when user asks to see all campaigns, list campaigns, or search for campaigns by name. Returns campaign_id and campaign_name. Supports optional search term filtering.",
         inputSchema: listCampaignsTool.parameters,
         execute: listCampaignsTool.execute,
+      },
+      ab_test_landing_analyzer: {
+        description: "Analyze A/B test cohorts for landing page campaigns. Analyzes users who landed on specific pages from campaigns and tracks their progression to features_tap events, grouping them by A/B test variants (new_landings_v3_A, new_landings_v3_B, other_or_null). Use this for A/B testing analysis of landing pages and user behavior.",
+        inputSchema: abTestLandingAnalyzerTool.parameters,
+        execute: abTestLandingAnalyzerTool.execute,
       },
     },
   });
